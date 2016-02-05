@@ -117,76 +117,39 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
           $config_entity => $machine_name,
         ),
       );
-      $links["entity." . $content_entity . ".field_ui_fields" . $machine_name] = array(
-        'title' => 'Manage fields',
-        'route_name' => "entity." . $content_entity . ".field_ui_fields",
-        'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
-        'route_parameters' => array(
-          $config_entity => $machine_name,
-        ),
-      );
-      $links["entity.entity_form_display." . $content_entity . ".default" . $machine_name] = array(
-        'title' => 'Manage form display',
-        'route_name' => "entity.entity_form_display." . $content_entity . ".default",
-        'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
-        'route_parameters' => array(
-          $config_entity => $machine_name,
-        ),
-      );
-      $links["entity.entity_view_display." . $content_entity . ".default" . $machine_name] = array(
-        'title' => 'Manage display',
-        'route_name' => "entity.entity_view_display." . $content_entity . ".default",
-        'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
-        'route_parameters' => array(
-          $config_entity => $machine_name,
-        ),
-      );
-      if (\Drupal::moduleHandler()->moduleExists('devel')) {
-        $links["entity.$config_entity.devel_load." . $machine_name] = array(
-          'title' => 'Devel',
-          'route_name' => "entity.$config_entity.devel_load",
-          'parent' => "entity.$config_entity.edit_form." . $machine_name,
+      if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+        $links["entity." . $content_entity . ".field_ui_fields" . $machine_name] = array(
+          'title' => 'Manage fields',
+          'route_name' => "entity." . $content_entity . ".field_ui_fields",
+          'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
+          'route_parameters' => array(
+            $config_entity => $machine_name,
+          ),
+        );
+        $links["entity.entity_form_display." . $content_entity . ".default" . $machine_name] = array(
+          'title' => 'Manage form display',
+          'route_name' => "entity.entity_form_display." . $content_entity . ".default",
+          'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
+          'route_parameters' => array(
+            $config_entity => $machine_name,
+          ),
+        );
+        $links["entity.entity_view_display." . $content_entity . ".default" . $machine_name] = array(
+          'title' => 'Manage display',
+          'route_name' => "entity.entity_view_display." . $content_entity . ".default",
+          'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
           'route_parameters' => array(
             $config_entity => $machine_name,
           ),
         );
       }
-      $fields = filterFieldsByEntityName($module_name, $machine_name);
-      foreach ($fields as $id => $label_bundle) {
-        $links["entity.field_config" . "$content_entity" . "_field_edit_form" . $id] = array(
-          'title' => $label_bundle,
-          'route_name' => "entity.field_config" . "$content_entity" . "_field_edit_form",
-          'parent' => "entity.$content_entity.field_ui_fields" . $machine_name,
+      if (\Drupal::moduleHandler()->moduleExists('devel')) {
+        $links["entity.$config_entity.devel_load." . $machine_name] = array(
+          'title' => 'Devel',
+          'route_name' => "entity." . $config_entity . ".devel_load",
+          'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
           'route_parameters' => array(
             $config_entity => $machine_name,
-            'field_config' => $id,
-          ),
-        );
-        $links["entity.field_config" . "$content_entity" . "_field__edit_form" . $id] = array(
-          'title' => "Edit",
-          'route_name' => "entity.field_config" . "$content_entity" . "_field__edit_form",
-          'parent' => "entity.field_config" . "$content_entity" . "_field_edit_form" . $id,
-          'route_parameters' => array(
-            $config_entity => $machine_name,
-            'field_config' => $id,
-          ),
-        );
-        $links["entity.field_config" . "$content_entity" . "_field_delete_form" . $id] = array(
-          'title' => "Delete",
-          'route_name' => "entity.field_config" . "$content_entity" . "_field_delete_form",
-          'parent' => "entity.field_config" . "$content_entity" . "_field_edit_form" . $id,
-          'route_parameters' => array(
-            $config_entity => $machine_name,
-            'field_config' => $id,
-          ),
-        );
-        $links["entity.field_config." . $content_entity . "_storage_edit_form" . $id] = array(
-          'title' => "Storage settings",
-          'route_name' => "entity.field_config." . $content_entity . "_storage_edit_form",
-          'parent' => "entity.field_config" . "$content_entity" . "_field_edit_form" . $id,
-          'route_parameters' => array(
-            $config_entity => $machine_name,
-            'field_config' => $id,
           ),
         );
       }
@@ -220,22 +183,23 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
     'parent' => 'entity.user_role.collection',
     'weight' => -5,
   );
-  $links['entity.user.field_ui_fields_'] = array(
-    'title' => 'Manage fields',
-    'route_name' => 'entity.user.field_ui_fields',
-    'parent' => 'entity.user.admin_form',
-  );
-
-  $links['entity.entity_form_display.user.default_'] = array(
-    'title' => 'Manage form display',
-    'route_name' => 'entity.entity_form_display.user.default',
-    'parent' => 'entity.user.admin_form',
-  );
-  $links['entity.entity_view_display.user.default_'] = array(
-    'title' => 'Manage display',
-    'route_name' => 'entity.entity_view_display.user.default',
-    'parent' => 'entity.user.admin_form',
-  );
+  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+    $links['entity.user.field_ui_fields_'] = array(
+      'title' => 'Manage fields',
+      'route_name' => 'entity.user.field_ui_fields',
+      'parent' => 'entity.user.admin_form',
+    );
+    $links['entity.entity_form_display.user.default_'] = array(
+      'title' => 'Manage form display',
+      'route_name' => 'entity.entity_form_display.user.default',
+      'parent' => 'entity.user.admin_form',
+    );
+    $links['entity.entity_view_display.user.default_'] = array(
+      'title' => 'Manage display',
+      'route_name' => 'entity.entity_view_display.user.default',
+      'parent' => 'entity.user.admin_form',
+    );
+  }
   foreach (user_roles() as $role) {
     $links['entity.user_role.edit_form.' . $role->id()] = array(
       'title' => $role->label(),
@@ -509,27 +473,6 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
 }
 
 /**
- * Filter Fields by entity type id.
- * @param $entity_type_id
- * @return array
- */
-function  filterFieldsByEntityName($entity_type_id, $bundle_search) {
-  //Get all fields.
-  $fields = \Drupal\field\Entity\FieldConfig::loadMultiple();
-  //Initialise an array to add all the fields needed.
-  $field_to_filter = array();
-  foreach ($fields as $key => $value) {
-    $entity_name = explode(".", $key)[0];
-    $bundle = explode(".", $key)[1];
-    if ($entity_name == $entity_type_id && $bundle_search == $bundle) {
-      //Store the field name needed in the array ( key = id field and value = label field).
-      $field_to_filter[$key] = $value->getLabel();
-    }
-  }
-  return $field_to_filter;
-}
-
-/**
  * Return installed themes.
  * @return array
  */
@@ -555,4 +498,3 @@ function getLinks($entity_type_id) {
   $links = $entity->getLinkTemplates();
   return $links;
 }
-
