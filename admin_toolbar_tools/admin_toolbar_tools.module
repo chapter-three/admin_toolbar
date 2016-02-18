@@ -1,11 +1,11 @@
 <?php
 
-use Drupal\Core\Routing\RouteMatchInterface;
-
 /**
  * @file
- * Prvides extra menu links for admin_toolbar.
+ * Provides extra menu links for the core drupal toolbar.
  */
+
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_toolbar().
