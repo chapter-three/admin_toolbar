@@ -50,18 +50,7 @@ function toolbar_tools_menu_navigation_links(array $tree) {
     if ($element->subtree) {
       toolbar_tools_menu_navigation_links($element->subtree);
     }
-
-    // Make sure we have a path specific ID in place, so we can attach icons
-    // and behaviors to the menu links.
     $link = $element->link;
-    $url = $link->getUrlObject();
-    if (!$url->isRouted()) {
-      // This is an unusual case, so just get a distinct, safe string.
-      $id = substr(Crypt::hashBase64($url->getUri()), 0, 16);
-    }
-    else {
-      $id = str_replace(array('.', '<', '>'), array('-', '', ''), $url->getRouteName());
-    }
 
     // Get the non-localized title to make the icon class.
     $definition = $link->getPluginDefinition();
