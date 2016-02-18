@@ -1,13 +1,13 @@
 /*---------------------- menu horizontal hover---------*/
-.toolbar .menu-item:hover {
+.toolbar-tray-horizontal .menu-item:hover {
     background: #fff;
 }
 
-.toolbar .menu-item:focus {
+.toolbar-tray-horizontal .menu-item:focus {
     background: #abeae4;
 }
 
-.toolbar .menu-item--expanded .menu {
+.toolbar-tray-horizontal .menu-item--expanded .menu {
     background: #fff;
     width: auto;
     height: auto;
