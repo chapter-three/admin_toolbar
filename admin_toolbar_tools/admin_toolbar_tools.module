@@ -36,7 +36,7 @@ function admin_toolbar_tools_help($route_name, RouteMatchInterface $route_match)
     case 'help.page.admin_toolbar_tools':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('The Admin Toolbar Tools module allows you to to add more fonctionalities to the toolbar like flush caches, runnig cron.') . '</p>';
+      $output .= '<p>' . t('The Admin Toolbar Extra Tools module allows you to to add more fonctionalities to the default toolbar like flush caches, runnig cron.') . '</p>';
 
       return $output;
   }
@@ -46,6 +46,7 @@ function admin_toolbar_tools_help($route_name, RouteMatchInterface $route_match)
  *  Implements hook_menu_links_discovered_alter().
  */
 function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
+  $moduleHandler = \Drupal::moduleHandler();
   $links['admin_toolbar_tools.help'] = array(
     'title' => t('Tools'),
     'route_name' => '<front>',
@@ -99,14 +100,15 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       "config_entity" => "taxonomy_vocabulary"
     ),
   );
-  /** Add  common links to entities if parent module exists.
+  /**
+   * Add  common links to entities if parent module exists.
    * The common links for entities are :
    * - Editing entity, Deleting entity,manage fields for entity
    * manage form display for an entity, entity view display
-   *  and others links relating to entity
+   * and others links relating to entity
    */
   foreach ($content_entities as $module_name => $entities) {
-    if (\Drupal::moduleHandler()->moduleExists($module_name)) {
+    if ($moduleHandler->moduleExists($module_name)) {
       $config_entity = $entities['config_entity'];
       $content_entity = $entities['content_entity'];
       foreach (\Drupal::entityTypeManager()->getStorage($config_entity)->loadMultiple() as $machine_name => $bundle) {
@@ -122,7 +124,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
           'parent' => "entity." . $config_entity . ".edit_form." . $machine_name,
           'route_parameters' => array($config_entity => $machine_name),
         );
-        if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+        if ($moduleHandler->moduleExists('field_ui')) {
           $links["entity." . $content_entity . ".field_ui_fields" . $machine_name] = array(
             'title' => t('Manage fields'),
             'route_name' => "entity." . $content_entity . ".field_ui_fields",
@@ -142,7 +144,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
             'route_parameters' => array($config_entity => $machine_name),
           );
         }
-        if (\Drupal::moduleHandler()->moduleExists('devel')) {
+        if ($moduleHandler->moduleExists('devel')) {
           $links["entity.$config_entity.devel_load." . $machine_name] = array(
             'title' => t('Devel'),
             'route_name' => "entity." . $config_entity . ".devel_load",
@@ -183,7 +185,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
     'parent' => 'entity.user_role.collection',
     'weight' => -5,
   );
-  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+  if ($moduleHandler->moduleExists('field_ui')) {
     $links['entity.user.field_ui_fields_'] = array(
       'title' => t('Manage fields'),
       'route_name' => 'entity.user.field_ui_fields',
@@ -219,7 +221,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       'parent' => 'entity.user_role.edit_form.' . $role->id(),
       'route_parameters' => array('user_role' => $role->id()),
     );
-    if (\Drupal::moduleHandler()->moduleExists('devel')) {
+    if ($moduleHandler->moduleExists('devel')) {
       $links['entity.user_role.devel_load.' . $role->id()] = array(
         'title' => t('Devel'),
         'route_name' => 'entity.user_role.devel_load',
@@ -228,7 +230,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       );
     }
   }
-  if (\Drupal::moduleHandler()->moduleExists('node')) {
+  if ($moduleHandler->moduleExists('node')) {
     $links['node.add_page']['parent'] = 'system.admin_content';
     $links['node.type_add'] = array(
       'title' => t('Add content type'),
@@ -246,7 +248,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       );
     }
   }
-  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+  if ($moduleHandler->moduleExists('field_ui')) {
     $links['field_ui.entity_form_mode_add'] = array(
       'title' => t('Add new form mode'),
       'route_name' => 'field_ui.entity_form_mode_add',
@@ -258,7 +260,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       'parent' => 'entity.entity_view_mode.collection',
     );
   }
-  if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
+  if ($moduleHandler->moduleExists('taxonomy')) {
     $links['entity.taxonomy_vocabulary.add_form'] = array(
       'title' => t('Add vocabulary'),
       'route_name' => 'entity.taxonomy_vocabulary.add_form',
@@ -274,7 +276,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       );
     }
   }
-  if (\Drupal::moduleHandler()->moduleExists('menu_ui')) {
+  if ($moduleHandler->moduleExists('menu_ui')) {
     $links['entity.menu.add_form'] = array(
       'title' => t('Add menu'),
       'route_name' => 'entity.menu.add_form',
@@ -295,7 +297,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
         'parent' => 'entity.menu.edit_form.' . $machine_name,
         'route_parameters' => array('menu' => $machine_name),
       );
-      if (\Drupal::moduleHandler()->moduleExists('devel')) {
+      if ($moduleHandler->moduleExists('devel')) {
         $links['entity.menu.devel_load.' . $machine_name] = array(
           'title' => t('Devel'),
           'route_name' => 'entity.menu.devel_load',
@@ -312,7 +314,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
     }
   }
   // If module block_content is enabled.
-  if (\Drupal::moduleHandler()->moduleExists('block_content')) {
+  if ($moduleHandler->moduleExists('block_content')) {
     $links['block_content.add_page'] = array(
       'title' => t('Add custom block'),
       'route_name' => 'block_content.add_page',
@@ -331,7 +333,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
     );
   }
   // If module contact is enabled.
-  if (\Drupal::moduleHandler()->moduleExists('contact')) {
+  if ($moduleHandler->moduleExists('contact')) {
     $links['contact.form_add'] = array(
       'title' => t('Add contact form'),
       'route_name' => 'contact.form_add',
@@ -339,8 +341,8 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       'weight' => -5
     );
   }
-  // If module update is enabled.
-  if (\Drupal::moduleHandler()->moduleExists('update')) {
+  // If module Update is enabled.
+  if ($moduleHandler->moduleExists('update')) {
     $links['update.module_update'] = array(
       'title' => t('Update'),
       'route_name' => 'update.module_update',
@@ -352,7 +354,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       'parent' => 'system.modules_list',
     );
   }
-  if (\Drupal::moduleHandler()->moduleExists('devel')) {
+  if ($moduleHandler->moduleExists('devel')) {
     $links['admin_development'] = array(
       'title' => t('Development'),
       'route_name' => 'system.admin_config_development',
@@ -411,7 +413,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
     );
   }
   // If module views_ui enabled.
-  if (\Drupal::moduleHandler()->moduleExists('views_ui')) {
+  if ($moduleHandler->moduleExists('views_ui')) {
     $links['views_ui.add'] = array(
       'title' => t('Add new view'),
       'route_name' => 'views_ui.add',
@@ -424,7 +426,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
     'route_name' => 'system.theme_settings',
     'parent' => 'system.themes_page',
   );
-  if (\Drupal::moduleHandler()->moduleExists('update')) {
+  if ($moduleHandler->moduleExists('update')) {
     $links['update.theme_install_'] = array(
       'title' => t('Install new theme'),
       'route_name' => 'update.theme_install',
@@ -435,7 +437,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       'route_name' => 'update.theme_update',
       'parent' => 'system.themes_page',
     );
-    //List of installed themes.
+    // Lists installed themes.
     $installed_themes = installedThemes();
     foreach ($installed_themes as $key_theme => $label_theme) {
       $links['system.theme_settings_theme' . '.' . $key_theme] = array(
@@ -462,6 +464,7 @@ function installedThemes() {
       $themes_installed[$key_theme] = $theme->getName();
     }
   }
+
   return $themes_installed;
 }
 
@@ -472,7 +475,8 @@ function installedThemes() {
  */
 function getLinks($entity_type_id) {
   $entity = \Drupal::entityTypeManager()->getDefinition($entity_type_id);
-  //Get all links related to entity.
+  // Get all links related to entity.
   $links = $entity->getLinkTemplates();
+
   return $links;
 }
